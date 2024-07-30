@@ -23,6 +23,15 @@ const userSchema = new mongoose.Schema({
     public_id: String,
     url: String,
   },
+  position: String,
+  role: {
+    type: String,
+    default: "user",
+  },
+  rating: {
+    type: Number,
+    default: 1,
+  },
 });
 
 module.exports = mongoose.model("User", userSchema);
