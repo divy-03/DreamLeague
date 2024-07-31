@@ -63,3 +63,8 @@ exports.loginUser = catchAsyncError(async (req, res) => {
     }
   }
 });
+
+exports.logOutUser = catchAsyncError(async (req, res) => {
+  res.clearCookie("dToken", { path: "/" });
+  return resSuccess(200, "Logged Out Successfully", res);
+});

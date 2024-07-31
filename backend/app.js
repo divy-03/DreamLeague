@@ -3,6 +3,9 @@ const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const errorMiddleware = require("./middleware/error");
+const cookieParser = require("cookie-parser");
+
+app.use(cookieParser());
 
 // use cookie-parser later
 
