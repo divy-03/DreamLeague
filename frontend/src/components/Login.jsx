@@ -1,10 +1,20 @@
 import React, { useState } from "react";
+import { useLoginUserMutation } from "../api/userApi";
+import Loader from "./Loader";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const loginSubmit = () => {};
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const loginSubmit = async (e) => {
+    e.preventDefault();
+    const result = await loginUser({ email, password });
+    console.log(result);
+  };
+
+  if (isLoading) return <Loader />;
   return (
     <div className="loginContainer">
       <div className="loginBox">
