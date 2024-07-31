@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const errorMiddleware = require("./middleware/error");
 
 // use cookie-parser later
 
@@ -26,7 +27,8 @@ app.use((req, res, next) => {
 });
 
 const user = require("./routes/userRoute");
-const cookieParser = require("cookie-parser");
 app.use("/api/v1", user);
+
+app.use(errorMiddleware);
 
 module.exports = app;
