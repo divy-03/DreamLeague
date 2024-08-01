@@ -1,39 +1,28 @@
 import React, { useState } from "react";
 import { useLoginUserMutation } from "../api/userApi";
 import Loader from "./Loader";
-import { useForm } from "react-hook-form";
+// import { useForm } from "react-hook-form";
 
 const Login = () => {
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  //
-  // const [loginUser, { isLoading }] = useLoginUserMutation();
-  //
-  // const loginSubmit = async (e) => {
-  //   e.preventDefault();
-  //   const result = await loginUser({ email, password });
-  //   console.log(result);
-  // };
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const {
-    register,
-    handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm();
+  const [loginUser, { isLoading }] = useLoginUserMutation();
+
+  const loginSubmit = async (e) => {
+    e.preventDefault();
+    const result = await loginUser({ email, password });
+    console.log(result);
+  };
 
   const [showPass, setShowPass] = useState(false);
 
-  const Submit = (data) => {
-    console.log(data); //This will show the obhect which contains the email & password
-  };
-
-  // if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
   return (
     <>
       <div className="Logo flex flex-col items-center mt-5">
         <img
-          src="https://pro.eslgaming.com/dreamleague/wp-content/uploads/2023/05/team-liquid.png"
+          src="https://res.cloudinary.com/djgwv8dck/image/upload/v1722521690/avatars/sprgdhkhf4rtler1yfal.png"
           alt="logo"
           className="h-24"
         />
@@ -43,10 +32,10 @@ const Login = () => {
       </div>
       <form
         className="max-w-sm dark:bg-gray-800 py-5 my-3 mx-1 bg-white rounded-lg sm:mx-auto"
-        onSubmit={handleSubmit(Submit)}
+        onSubmit={loginSubmit}
       >
         <div className="text-center dark:text-white text-3xl font-bold italic">
-          Login / Signup
+          Login
         </div>
         <div className="mb-5 ml-2">
           <label
@@ -60,11 +49,8 @@ const Login = () => {
             id="email"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2 max-sm:w-[90%] sm:w-[95%]"
             placeholder="name@flowbite.com"
-            {...register("email", { required: true })}
+            onChange={(e) => setEmail(e.target.value)}
           />
-          {errors.email && (
-            <p className="text-red-600">This field is required</p>
-          )}
         </div>
         <div className="mb-5 ml-2">
           <label
@@ -77,11 +63,8 @@ const Login = () => {
             type={showPass ? "text" : "password"}
             id="password"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2 max-sm:w-[90%] sm:w-[95%]"
-            {...register("password", { required: true })}
+            onChange={(e) => setPassword(e.target.value)}
           />
-          {errors.password && (
-            <p className="text-red-600">This field is required</p>
-          )}
         </div>
         <div className="flex items-start mb-5 ml-3">
           <div className="flex items-center h-5">
@@ -118,7 +101,7 @@ const Login = () => {
               className="flex items-center mb-4 sm:mb-0 space-x-3 rtl:space-x-reverse"
             >
               <img
-                src="https://pro.eslgaming.com/dreamleague/wp-content/uploads/2023/05/team-liquid.png"
+                src="https://res.cloudinary.com/djgwv8dck/image/upload/v1722521690/avatars/sprgdhkhf4rtler1yfal.png"
                 className="h-8"
                 alt="Flowbite Logo"
               />
@@ -153,9 +136,9 @@ const Login = () => {
           <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2024{" "}
             <a href="https://flowbite.com/" className="hover:underline">
-              DreamLeague™
+              DreamLeague
             </a>
-            . All Rights Reserved.
+            ™. All Rights Reserved.
           </span>
         </div>
       </footer>
