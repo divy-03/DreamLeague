@@ -24,6 +24,10 @@ const Login = () => {
 
   const [showPass, setShowPass] = useState(false);
 
+  const Submit = (data) => {
+    console.log(data); //This will show the obhect which contains the email & password
+  };
+
   // if (isLoading) return <Loader />;
   return (
     <>
@@ -37,7 +41,10 @@ const Login = () => {
           Dream <span className="italic">League</span>
         </p>
       </div>
-      <form className="max-w-sm mx-auto dark:bg-gray-800 py-5 my-3 mx-1">
+      <form
+        className="max-w-sm dark:bg-gray-800 py-5 my-3 mx-1 bg-white rounded-lg sm:mx-auto"
+        onSubmit={handleSubmit(Submit)}
+      >
         <div className="text-center dark:text-white text-3xl font-bold italic">
           Login / Signup
         </div>
@@ -51,10 +58,13 @@ const Login = () => {
           <input
             type="email"
             id="email"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2 max-sm:w-[90%]"
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2 max-sm:w-[90%] sm:w-[95%]"
             placeholder="name@flowbite.com"
-            required
+            {...register("email", { required: true })}
           />
+          {errors.email && (
+            <p className="text-red-600">This field is required</p>
+          )}
         </div>
         <div className="mb-5 ml-2">
           <label
@@ -66,9 +76,12 @@ const Login = () => {
           <input
             type={showPass ? "text" : "password"}
             id="password"
-            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2 max-sm:w-[90%] "
-            required
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 ml-2 max-sm:w-[90%] sm:w-[95%]"
+            {...register("password", { required: true })}
           />
+          {errors.password && (
+            <p className="text-red-600">This field is required</p>
+          )}
         </div>
         <div className="flex items-start mb-5 ml-3">
           <div className="flex items-center h-5">
@@ -77,7 +90,6 @@ const Login = () => {
               type="checkbox"
               value={showPass}
               className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-              required
               onChange={() => {
                 setShowPass(!showPass);
               }}
@@ -137,7 +149,7 @@ const Login = () => {
               </li>
             </ul>
           </div>
-          <hr className="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+          <hr className="my-4 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-5" />
           <span className="block text-sm text-gray-500 sm:text-center dark:text-gray-400">
             © 2024{" "}
             <a href="https://flowbite.com/" className="hover:underline">
