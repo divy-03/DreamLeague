@@ -4,6 +4,10 @@ const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
+    user_id: {
+      type: mongoose.Schema.Types.ObjectId,
+      auto: true,
+    },
     name: {
       type: String,
       required: [true, "Please enter your name"],

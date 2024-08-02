@@ -149,8 +149,8 @@ exports.resetPassword = catchAsyncError(async (req, res) => {
 });
 
 exports.getUserDetails = catchAsyncError(async (req, res) => {
-  const userId = req.user.id;
-  const user = await User.findOne({ _id: userId });
+  const userId = req.user.user_id;
+  const user = await User.findOne({ userId });
 
   if (!user) {
     return resError(404, "User not found", res);
@@ -188,10 +188,11 @@ exports.updatePassword = catchAsyncError(async (req, res) => {
 });
 
 exports.updateProfile = catchAsyncError(async (req, res) => {
-  const userId = req.user.id;
+  const userId = req.user.user_id;
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
+    position: req.body.position,
   };
 
   if (req.body.avatar === "noImg") {
@@ -236,10 +237,10 @@ exports.getAllUsers = catchAsyncError(async (req, res) => {
 });
 
 exports.getUser = catchAsyncError(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.user_id);
 
   if (!user) {
-    return resError(404, `User not found with id: ${req.params.id}`);
+    return resError(404, `User not found with id: ${req.params.user_id}`);
   }
 
   return res.status(200).json({
@@ -255,7 +256,7 @@ exports.editUserRole = catchAsyncError(async (req, res) => {
     role: req.body.role,
   };
 
-  const user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+  const user = await User.findByIdAndUpdate(req.params.user_id, newUserData, {
     new: true,
     runValidators: true,
     userFindAndModify: false,
@@ -272,7 +273,7 @@ exports.editUserRole = catchAsyncError(async (req, res) => {
 });
 
 exports.deleteUser = catchAsyncError(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const user = await User.findById(req.params.user_id);
 
   if (!user) {
     return resError(404, `User not found`, res);
@@ -282,5 +283,13 @@ exports.deleteUser = catchAsyncError(async (req, res) => {
   await cloudinary.v2.uploader.destroy(imgId);
   await user.deleteOne();
 
-  resSuccess(200, `User with id: ${req.params.id} deleted successfully`, res);
+  resSuccess(200, `User with id: ${req.params.user_id} deleted successfully`, res);
+});
+
+exports.ratePlayer = catchAsyncError(async (req, res) => {
+  const { userId, rating } = req.body;
+  const user = await User.findById(userId);
+  if (!user) {
+    return resError(404, `User not found`, res);
+  }
 });
