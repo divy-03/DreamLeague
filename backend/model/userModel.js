@@ -4,7 +4,7 @@ const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
-    user_id: {
+    uid: {
       type: mongoose.Schema.Types.ObjectId,
       auto: true,
     },
@@ -34,6 +34,8 @@ const userSchema = new mongoose.Schema(
       enum: ["player", "admin", "captain"],
       default: "player",
     },
+
+    // TODO: may be need to add team id here to refer to which team the player will belong to
 
     resetPasswordToken: String,
     resetPasswordExpire: Date,

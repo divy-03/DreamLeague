@@ -2,18 +2,18 @@ const mongoose = require("mongoose");
 
 const bidSchema = new mongoose.Schema(
   {
-    bid_id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-    auction_id: {
+    bid: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    aid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Auction",
       required: true,
     },
-    captain_id: {
+    cid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Captain",
       required: true,
     },
-    bid_amount: { type: Number, required: true },
+    bidAmount: { type: Number, required: true },
   },
   { timestamps: true }
 );

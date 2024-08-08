@@ -3,7 +3,7 @@ import App from "./App.jsx";
 import "./styles/main.scss";
 import { Provider } from "react-redux";
 import store from "./store.js";
-import "./index.css";
+// import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>

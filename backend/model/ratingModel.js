@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 
 const playerRatingSchema = new mongoose.Schema(
   {
-    rating_id: { type: mongoose.Schema.Types.ObjectId, auto: true },
-    user_id: {
+    rid: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    uid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,

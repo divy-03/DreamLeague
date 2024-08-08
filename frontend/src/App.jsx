@@ -5,7 +5,7 @@ import Loader from "./components/Loader";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import Register from "./components/Register";
-import "./App.css";
+// import "./App.css";
 // const Home = lazy(() => import("./components/Home"));
 // const Login = lazy(() => import("./components/Login"));
 // const Register = lazy(() => import("./components/Register"));
