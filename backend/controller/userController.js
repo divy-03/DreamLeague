@@ -8,35 +8,39 @@ const crypto = require("crypto");
 const cloudinary = require("cloudinary");
 const User = require("../model/userModel");
 const sendToken = require("../tools/sendToken");
+const PlayerRating = require("../model/ratingModel");
 
+// Add User (cloudinary problem)
 exports.registerUser = catchAsyncError(async (req, res) => {
   const { name, email, password, avatar } = req.body;
 
   // Hash the password
-  const salt = await bcrypt.genSalt(10); // Async version is recommended
+  const salt = await bcrypt.genSalt(10);
   const secPass = await bcrypt.hash(password, salt);
 
   // Upload avatar to Cloudinary
-  const avt = await cloudinary.v2.uploader.upload(avatar, {
-    folder: "avatars",
-    width: 300,
-    crop: "scale",
-  });
+  // const avt = await cloudinary.v2.uploader.upload(avatar, {
+  //   folder: "avatars",
+  //   width: 300,
+  //   crop: "scale",
+  // });
 
   // Create a new user
   const user = await User.create({
     name,
     email,
     password: secPass,
-    avatar: {
-      public_id: avt.public_id,
-      url: avt.secure_url, // Use secure_url for HTTPS
-    },
+    // avatar: {
+    //   public_id: avt.public_id,
+    //   url: avt.secure_url,
+    // },
   });
+  // res.status(200).json({user})
 
   return sendToken(user, 201, res);
 });
 
+// Login User
 exports.loginUser = catchAsyncError(async (req, res) => {
   const { email, password } = req.body;
   await check("email", "Please enter a valid email").isEmail().run(req);
@@ -66,11 +70,13 @@ exports.loginUser = catchAsyncError(async (req, res) => {
   }
 });
 
+// LogOut User (working)
 exports.logOutUser = catchAsyncError(async (req, res) => {
   res.clearCookie("dToken", { path: "/" });
   return resSuccess(200, "Logged Out Successfully", res);
 });
 
+// Forgot Password
 exports.forgotPassword = catchAsyncError(async (req, res) => {
   const { email } = req.body;
 
@@ -116,6 +122,7 @@ exports.forgotPassword = catchAsyncError(async (req, res) => {
   }
 });
 
+// Reset Password
 exports.resetPassword = catchAsyncError(async (req, res) => {
   const resetPasswordToken = crypto
     .createHash("sha256")
@@ -131,12 +138,12 @@ exports.resetPassword = catchAsyncError(async (req, res) => {
     return resError(400, "Reset Password link is invalid or expired", res);
   }
 
-  if (req.body.password !== req.body.confirmPassword) {
+  if (req.body.newPassword !== req.body.confirmPassword) {
     return resError(400, "Password doesn't match", res);
   }
 
   const salt = await bcrypt.genSalt(10);
-  const secPass = await bcrypt.hash(req.body.password, salt);
+  const secPass = await bcrypt.hash(req.body.newPassword, salt);
 
   user.password = secPass;
 
@@ -148,9 +155,10 @@ exports.resetPassword = catchAsyncError(async (req, res) => {
   sendToken(user, 200, res);
 });
 
+// Get User Profile
 exports.getUserDetails = catchAsyncError(async (req, res) => {
-  const userId = req.user.user_id;
-  const user = await User.findOne({ userId });
+  const uid = req.user.id;
+  const user = await User.findById(uid);
 
   if (!user) {
     return resError(404, "User not found", res);
@@ -161,6 +169,7 @@ exports.getUserDetails = catchAsyncError(async (req, res) => {
   });
 });
 
+// Update Password
 exports.updatePassword = catchAsyncError(async (req, res) => {
   const user = await User.findOne(req.user._id).select("+password");
 
@@ -187,8 +196,9 @@ exports.updatePassword = catchAsyncError(async (req, res) => {
   return sendToken(user, 200, res);
 });
 
+// Update Profile
 exports.updateProfile = catchAsyncError(async (req, res) => {
-  const userId = req.user.user_id;
+  const userId = req.user.uid;
   const newUserData = {
     name: req.body.name,
     email: req.body.email,
@@ -237,10 +247,10 @@ exports.getAllUsers = catchAsyncError(async (req, res) => {
 });
 
 exports.getUser = catchAsyncError(async (req, res) => {
-  const user = await User.findById(req.params.user_id);
+  const user = await User.findById(req.params.uid);
 
   if (!user) {
-    return resError(404, `User not found with id: ${req.params.user_id}`);
+    return resError(404, `User not found with id: ${req.params.uid}`);
   }
 
   return res.status(200).json({
@@ -256,7 +266,7 @@ exports.editUserRole = catchAsyncError(async (req, res) => {
     role: req.body.role,
   };
 
-  const user = await User.findByIdAndUpdate(req.params.user_id, newUserData, {
+  const user = await User.findByIdAndUpdate(req.params.uid, newUserData, {
     new: true,
     runValidators: true,
     userFindAndModify: false,
@@ -273,7 +283,7 @@ exports.editUserRole = catchAsyncError(async (req, res) => {
 });
 
 exports.deleteUser = catchAsyncError(async (req, res) => {
-  const user = await User.findById(req.params.user_id);
+  const user = await User.findById(req.params.uid);
 
   if (!user) {
     return resError(404, `User not found`, res);
@@ -283,13 +293,19 @@ exports.deleteUser = catchAsyncError(async (req, res) => {
   await cloudinary.v2.uploader.destroy(imgId);
   await user.deleteOne();
 
-  resSuccess(200, `User with id: ${req.params.user_id} deleted successfully`, res);
+  resSuccess(200, `User with id: ${req.params.uid} deleted successfully`, res);
 });
 
 exports.ratePlayer = catchAsyncError(async (req, res) => {
-  const { userId, rating } = req.body;
-  const user = await User.findById(userId);
+  const { rating } = req.body;
+  const uid = req.params.id;
+  const user = await User.findById(uid);
   if (!user) {
     return resError(404, `User not found`, res);
   }
+  const newRating = await PlayerRating.create({
+    uid,
+    rating,
+  });
+  res.status(201).json({ newRating });
 });

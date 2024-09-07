@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const teamPlayerSchema = new mongoose.Schema(
   {
-    tpid: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    // tpid: { type: mongoose.Schema.Types.ObjectId, auto: true },
     tid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Team",

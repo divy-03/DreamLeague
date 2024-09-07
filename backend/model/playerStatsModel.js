@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const playerStatisticsSchema = new mongoose.Schema(
   {
-    sid: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    // sid: { type: mongoose.Schema.Types.ObjectId, auto: true },
     uid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

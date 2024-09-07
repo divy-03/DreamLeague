@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const teamSchema = new mongoose.Schema(
   {
-    tid: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    // tid: { type: mongoose.Schema.Types.ObjectId, auto: true },
     cid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Captain",

@@ -4,10 +4,6 @@ const crypto = require("crypto");
 
 const userSchema = new mongoose.Schema(
   {
-    uid: {
-      type: mongoose.Schema.Types.ObjectId,
-      auto: true,
-    },
     name: {
       type: String,
       required: [true, "Please enter your name"],
@@ -31,8 +27,8 @@ const userSchema = new mongoose.Schema(
     position: String,
     role: {
       type: String,
-      enum: ["player", "admin", "captain"],
-      default: "player",
+      enum: ["user", "admin", "owner"],
+      default: "user",
     },
 
     // TODO: may be need to add team id here to refer to which team the player will belong to

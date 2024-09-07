@@ -11,7 +11,7 @@ exports.fetchUser = catchAsyncError(async (req, res, next) => {
   }
 
   const data = jwt.verify(dToken, process.env.JWT_SECRET);
-  req.user = await User.findById(data.user.user_id);
+  req.user = await User.findById(data.user.id);
 
   next();
 });

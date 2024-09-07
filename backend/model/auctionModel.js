@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 const auctionSchema = new mongoose.Schema(
   {
-    aid: { type: mongoose.Schema.Types.ObjectId, auto: true },
+    // aid: { type: mongoose.Schema.Types.ObjectId, auto: true },
     uid: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
