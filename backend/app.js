@@ -32,6 +32,10 @@ app.use((req, res, next) => {
 const user = require("./routes/userRoute");
 app.use("/api/v1", user);
 
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
 app.use(errorMiddleware);
 
 module.exports = app;
